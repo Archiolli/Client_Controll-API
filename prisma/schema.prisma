@@ -13,12 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String @default(uuid())
+model processos {
+  id       BigInt @id @default(autoincrement())
   nome     String @unique
   processo String
   email    String
   status   Int
 
   @@map("processos")
+}
+
+model User {
+  id    BigInt @id @default(autoincrement())
+  nome  String
+  email String @unique
+  senha String
+
+  @@map("users")
 }
