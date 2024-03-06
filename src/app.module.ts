@@ -1,5 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ProcessoModule } from './modules/processos/processos.module';
+import { LoggerMiddleware } from './modules/middlewares/logger.middleware';
+import { ProcessoController } from './modules/processos/processos.controller';
 
 
 @Module({
@@ -7,4 +9,8 @@ import { ProcessoModule } from './modules/processos/processos.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {configure(consumer: MiddlewareConsumer) {
+  consumer
+    .apply(LoggerMiddleware)
+    .forRoutes(ProcessoController);
+}}
