@@ -6,12 +6,11 @@ import { LoggerMiddleware } from './entities/middlewares/logger.middleware';
 import { ProcessoModule } from './entities/processos/processos.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaService } from './database/prisma.service';
-import { AuthController } from './auth/auth.controller';
 
 
 @Module({
-  imports: [ProcessoModule, UsersModule, AuthModule],
-  controllers: [AuthController],
+  imports: [ProcessoModule, UsersModule, AuthModule ],
+  controllers: [],
   providers: [UsersService, PrismaService],
 })
 export class AppModule {configure(consumer: MiddlewareConsumer) {

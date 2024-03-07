@@ -9,9 +9,11 @@ import {
     Param,
     Post,
     Put,
+    UseGuards,
 } from '@nestjs/common';
 import { ProcessosDTO } from './processos.dto';
 import { ProcessosService } from './processos.service';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('processo')
 export class ProcessoController {
@@ -32,12 +34,13 @@ export class ProcessoController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Get()
     async findAll() {
         try {
             return await this.processoService.findAll();
         } catch (error) {
-            throw new ForbiddenException();
+            throw new ForbiddenException(error);
         }
     }
 
@@ -56,6 +59,7 @@ export class ProcessoController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {
         try {
