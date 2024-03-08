@@ -13,18 +13,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model processos {
-  id       Int @id @default(autoincrement())
-  nome     String @unique
-  processo String
-  email    String
-  status   Int
+model Cliente {
+  id             Int       @id @default(autoincrement())
+  nome           String    @unique
+  profissao      String
+  docs           String
+  consultor      Consultor @relation(fields: [consultorId], references: [id])
+  consultorId    Int
+  fase           String
+  observacao     String
+  prazoAplicacao String
+  prioridade     String
+  empresaAberta  String
+  businessPlan   String
+  diploma        String
+  historico      String
+  equivalencia   String
+  lor            String
+  status         String
+  visto          Visto?    @relation(fields: [vistoId], references: [id])
+  vistoId        Int?
 
-  @@map("processos")
+  @@map("casos")
+}
+
+model Consultor {
+  id       Int       @id @default(autoincrement())
+  nome     String    @unique
+  clientes Cliente[]
+
+  @@map("consultores")
+}
+
+model Visto {
+  id       Int       @id @default(autoincrement())
+  tipo     String    @unique
+  clientes Cliente[]
+
+  @@map("vistos")
 }
 
 model User {
-  id    Int @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   nome  String
   email String @unique
   senha String

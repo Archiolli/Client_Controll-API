@@ -6,10 +6,12 @@ import { LoggerMiddleware } from './entities/middlewares/logger.middleware';
 import { ProcessoModule } from './entities/processos/processos.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaService } from './database/prisma.service';
+import { VistosModule } from './entities/vistos/vistos.module';
+import { ConsultorModule } from './entities/consultor/consultor.module';
 
 
 @Module({
-  imports: [ProcessoModule, UsersModule, AuthModule ],
+  imports: [ProcessoModule, UsersModule, AuthModule, VistosModule, ConsultorModule ],
   controllers: [],
   providers: [UsersService, PrismaService],
 })

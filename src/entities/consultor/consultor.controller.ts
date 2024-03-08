@@ -11,19 +11,19 @@ import {
     Put,
     UseGuards,
 } from '@nestjs/common';
-import { ProcessosDTO } from './processos.dto';
-import { ProcessosService } from './processos.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { ConsultorService } from './consultor.service';
+import { ConsultorDTO } from './consultor.dto';
 
-@Controller('processo')
-export class ProcessoController {
-    constructor(private readonly processoService: ProcessosService) { }
+@Controller('consultor')
+export class ConsultorController {
+    constructor(private readonly consultorService: ConsultorService) { }
 
     @Post()
-    async create(@Body() data: ProcessosDTO) {
+    async create(@Body() data: ConsultorDTO) {
 
         try {
-            return await this.processoService.create(data);
+            return await this.consultorService.create(data);
         } catch (error) {
             throw new HttpException({
                 statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -37,17 +37,17 @@ export class ProcessoController {
     @Get()
     async findAll() {
         try {
-            return await this.processoService.findAll();
+            return await this.consultorService.findAll();
         } catch (error) {
             throw new ForbiddenException(error);
         }
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() data: ProcessosDTO) {
+    async update(@Param('id') id: string, @Body() data: ConsultorDTO) {
 
         try {
-            return await this.processoService.update(id, data);
+            return await this.consultorService.update(id, data);
         } catch (error) {
             throw new HttpException({
                 statusCode: HttpStatus.BAD_REQUEST,
@@ -58,11 +58,10 @@ export class ProcessoController {
         }
     }
 
-    @UseGuards(JwtGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {
         try {
-            return await this.processoService.delete(id);
+            return await this.consultorService.delete(id);
         } catch (error) {
             throw new HttpException({
                 statusCode: HttpStatus.NOT_ACCEPTABLE,
@@ -72,4 +71,6 @@ export class ProcessoController {
             });
         }
     }
+
+
 }

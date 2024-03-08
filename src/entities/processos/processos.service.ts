@@ -1,37 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { ProcessosDTO } from './processos.dto';
 
 
-    
+
 @Injectable()
 export class ProcessosService {
     constructor(private prisma: PrismaService) { }
 
     async create(data: ProcessosDTO) {
-        const processoExists = await this.prisma.processos.findFirst({
+        const processoExists = await this.prisma.cliente.findFirst({
             where: {
                 nome: data.nome,
             },
         });
 
         if (processoExists) {
-            throw new Error('.processos already exists');
+            throw new Error('processos already exists');
         }
 
-        const processo = await this.prisma.processos.create({
-            data,
+        const consultorExists = await this.prisma.consultor.findUnique({
+            where: {
+                id: data.consultorId,
+            },
+        });
+
+        if (!consultorExists) {
+            throw new NotFoundException('Consultor não encontrado.');
+        }
+
+        const vistoExists = await this.prisma.visto.findUnique({
+            where: {
+                id: data.vistoId,
+            },
+        });
+
+        if (!vistoExists) {
+            throw new NotFoundException('Visto não encontrado.');
+        }
+
+
+        const processo = await this.prisma.cliente.create({
+            data
         });
 
         return processo;
     }
 
     async findAll() {
-        return this.prisma.processos.findMany();
+        return this.prisma.cliente.findMany();
     }
 
     async update(nome: string, data: ProcessosDTO) {
-        const processoExists = await this.prisma.processos.findFirst({
+        const processoExists = await this.prisma.cliente.findFirst({
             where: {
                 nome,
             },
@@ -41,7 +62,7 @@ export class ProcessosService {
             throw new Error('Processo does not exists!');
         }
 
-        return await this.prisma.processos.update({
+        return await this.prisma.cliente.update({
             data,
             where: {
                 nome,
@@ -51,17 +72,17 @@ export class ProcessosService {
     }
 
     async delete(nome: string) {
-        const processoExists = await this.prisma.processos.findFirst({
+        const casosExists = await this.prisma.cliente.findFirst({
             where: {
                 nome,
             },
         });
 
-        if (!processoExists) {
+        if (!casosExists) {
             throw new Error('Processo does not exists!');
         }
 
-        return await this.prisma.processos.delete({
+        return await this.prisma.cliente.delete({
             where: {
                 nome,
             },
