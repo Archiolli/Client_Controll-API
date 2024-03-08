@@ -19,6 +19,7 @@ import { JwtGuard } from 'src/auth/guards/jwt.guard';
 export class ProcessoController {
     constructor(private readonly processoService: ProcessosService) { }
 
+    @UseGuards(JwtGuard)
     @Post()
     async create(@Body() data: ProcessosDTO) {
 
@@ -34,6 +35,7 @@ export class ProcessoController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Get()
     async findAll() {
         try {
@@ -43,6 +45,7 @@ export class ProcessoController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() data: ProcessosDTO) {
 

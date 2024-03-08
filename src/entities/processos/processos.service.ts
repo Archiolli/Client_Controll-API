@@ -48,7 +48,20 @@ export class ProcessosService {
     }
 
     async findAll() {
-        return this.prisma.cliente.findMany();
+        const processos = this.prisma.cliente.findMany({
+            include: {
+                consultor: {
+                    select: {
+                        nome: true
+                    }
+                },
+                visto: {
+                    select: {
+                        tipo: true
+                    }
+                }
+            }
+        });
     }
 
     async update(nome: string, data: ProcessosDTO) {

@@ -19,6 +19,7 @@ import { vistosDTO } from './vistos.dto';
 export class VistosController {
     constructor(private readonly vistoService: VistosService) { }
 
+    @UseGuards(JwtGuard)
     @Post()
     async create(@Body() data: vistosDTO) {
 
@@ -34,6 +35,7 @@ export class VistosController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Get()
     async findAll() {
         try {
@@ -43,6 +45,7 @@ export class VistosController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() data: vistosDTO) {
 
@@ -58,6 +61,7 @@ export class VistosController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {
         try {

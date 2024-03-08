@@ -19,6 +19,7 @@ import { ConsultorDTO } from './consultor.dto';
 export class ConsultorController {
     constructor(private readonly consultorService: ConsultorService) { }
 
+    @UseGuards(JwtGuard)
     @Post()
     async create(@Body() data: ConsultorDTO) {
 
@@ -34,6 +35,7 @@ export class ConsultorController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Get()
     async findAll() {
         try {
@@ -42,7 +44,7 @@ export class ConsultorController {
             throw new ForbiddenException(error);
         }
     }
-
+    @UseGuards(JwtGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() data: ConsultorDTO) {
 
@@ -58,6 +60,7 @@ export class ConsultorController {
         }
     }
 
+    @UseGuards(JwtGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {
         try {
