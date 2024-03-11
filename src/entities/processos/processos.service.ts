@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { ProcessosDTO } from './processos.dto';
+import { UsersService } from '../users/users.service';
+import { User } from '@prisma/client';
 
 
 
@@ -14,11 +16,11 @@ export class ProcessosService {
                 nome: data.nome,
             },
         });
-
         if (processoExists) {
             throw new Error('processos already exists');
         }
 
+        
         const consultorExists = await this.prisma.consultor.findUnique({
             where: {
                 id: data.consultorId,
@@ -47,22 +49,27 @@ export class ProcessosService {
         return processo;
     }
 
-    async findAll() {
-        const processos = this.prisma.cliente.findMany({
-            include: {
-                consultor: {
-                    select: {
-                        nome: true
-                    }
-                },
-                visto: {
-                    select: {
-                        tipo: true
-                    }
-                }
-            }
+    async findAll(userId: number) {
+        const processos = await this.prisma.cliente.findMany({
+          where: {
+            userId: userId,
+          },
+          include: {
+            consultor: {
+              select: {
+                nome: true,
+              },
+            },
+            visto: {
+              select: {
+                tipo: true,
+              },
+            },
+          },
         });
-    }
+    
+        return processos;
+      }
 
     async update(nome: string, data: ProcessosDTO) {
         const processoExists = await this.prisma.cliente.findFirst({
@@ -79,7 +86,6 @@ export class ProcessosService {
             data,
             where: {
                 nome,
-
             },
         });
     }

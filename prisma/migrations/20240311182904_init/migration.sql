@@ -16,21 +16,27 @@ CREATE TABLE "casos" (
     "equivalencia" TEXT NOT NULL,
     "lor" TEXT NOT NULL,
     "status" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "vistoId" INTEGER,
     CONSTRAINT "casos_consultorId_fkey" FOREIGN KEY ("consultorId") REFERENCES "consultores" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "casos_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "casos_vistoId_fkey" FOREIGN KEY ("vistoId") REFERENCES "vistos" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "consultores" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "nome" TEXT NOT NULL
+    "nome" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    CONSTRAINT "consultores_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "vistos" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "tipo" TEXT NOT NULL
+    "tipo" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    CONSTRAINT "vistos_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable

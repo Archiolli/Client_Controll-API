@@ -4,11 +4,13 @@ import {
     Delete,
     ForbiddenException,
     Get,
+    Header,
     HttpException,
     HttpStatus,
     Param,
     Post,
     Put,
+    Request,
     UseGuards,
 } from '@nestjs/common';
 import { ProcessosDTO } from './processos.dto';
@@ -37,14 +39,15 @@ export class ProcessoController {
 
     @UseGuards(JwtGuard)
     @Get()
-    async findAll() {
+    @Header('Cache-Control', 'none')
+    async findAll(@Request() req) {
         try {
-            return await this.processoService.findAll();
+            const { id } = req.user; 
+            return await this.processoService.findAll(id);
         } catch (error) {
             throw new ForbiddenException(error);
         }
     }
-
     @UseGuards(JwtGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() data: ProcessosDTO) {

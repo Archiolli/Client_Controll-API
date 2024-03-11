@@ -13,15 +13,15 @@ export class AuthService {
         const user = await this.validateUser(atualUser)
 
         const payload = {
+            id: user.id,
             email: user.email,
             sub: {
                 nome: user.nome,
             }
         }
 
-        const { id, ...restUser } = user
         return {
-            restUser,
+            user,
             backEndTokens: {
                 acssesToken: await this.jwtService.signAsync(payload, {
                     expiresIn: '2h',

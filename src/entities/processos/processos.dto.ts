@@ -34,4 +34,6 @@ export class ProcessosDTO {
     status: string;
     @IsNumber()
     vistoId: number;
+    @IsNumber()
+    userId: number;
 }
