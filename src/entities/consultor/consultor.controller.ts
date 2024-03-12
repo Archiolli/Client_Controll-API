@@ -9,6 +9,7 @@ import {
     Param,
     Post,
     Put,
+    Request,
     UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
@@ -37,9 +38,10 @@ export class ConsultorController {
 
     @UseGuards(JwtGuard)
     @Get()
-    async findAll() {
+    async findAll(@Request() req) {
         try {
-            return await this.consultorService.findAll();
+            const { id } = req.user;
+            return await this.consultorService.findAll(id);
         } catch (error) {
             throw new ForbiddenException(error);
         }

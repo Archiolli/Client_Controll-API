@@ -27,8 +27,15 @@ export class ConsultorService {
         return consultor;
     }
 
-    async findAll() {
-        return this.prisma.consultor.findMany();
+    async findAll(userId : number) {
+
+        
+        
+        return this.prisma.consultor.findMany({
+            where:{
+                userId: userId
+            }
+        });
     }
 
 

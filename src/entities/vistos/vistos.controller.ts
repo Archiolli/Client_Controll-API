@@ -4,11 +4,13 @@ import {
     Delete,
     ForbiddenException,
     Get,
+    Header,
     HttpException,
     HttpStatus,
     Param,
     Post,
     Put,
+    Request,
     UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
@@ -22,7 +24,6 @@ export class VistosController {
     @UseGuards(JwtGuard)
     @Post()
     async create(@Body() data: vistosDTO) {
-
         try {
             return await this.vistoService.create(data);
         } catch (error) {
@@ -37,11 +38,30 @@ export class VistosController {
 
     @UseGuards(JwtGuard)
     @Get()
-    async findAll() {
+    @Header('Cache-Control', 'none')
+    async findAll(@Request() req): Promise<vistosDTO[]> {
         try {
-            return await this.vistoService.findAll();
+            const { id } = req.user
+            return await this.vistoService.findAll(id);
         } catch (error) {
             throw new ForbiddenException(error);
+        }
+    }
+
+    @UseGuards(JwtGuard)
+    @Get(':id')
+    @Header('Cache-Control', 'none')
+    async getById(@Param('id') id: number, @Request() req): Promise<vistosDTO> {
+        try {
+            const userId = req.user.id;
+            return await this.vistoService.getById(id, userId);
+        } catch (error) {
+            throw new HttpException({
+                statusCode: HttpStatus.BAD_REQUEST,
+                error: `Erro na execução: ${error}`,
+            }, HttpStatus.BAD_REQUEST, {
+                cause: error
+            });
         }
     }
 

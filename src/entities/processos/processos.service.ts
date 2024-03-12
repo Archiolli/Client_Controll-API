@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { ProcessosDTO } from './processos.dto';
 import { UsersService } from '../users/users.service';
@@ -20,7 +20,7 @@ export class ProcessosService {
             throw new Error('processos already exists');
         }
 
-        
+
         const consultorExists = await this.prisma.consultor.findUnique({
             where: {
                 id: data.consultorId,
@@ -51,25 +51,57 @@ export class ProcessosService {
 
     async findAll(userId: number) {
         const processos = await this.prisma.cliente.findMany({
-          where: {
-            userId: userId,
-          },
-          include: {
-            consultor: {
-              select: {
-                nome: true,
-              },
+            where: {
+                userId: userId,
             },
-            visto: {
-              select: {
-                tipo: true,
-              },
+            include: {
+                consultor: {
+                    select: {
+                        nome: true,
+                    },
+                },
+                visto: {
+                    select: {
+                        tipo: true,
+                    },
+                },
             },
-          },
         });
-    
+
         return processos;
-      }
+    }
+
+
+
+    async getById(id: number, userId: number) {
+        const caseExists = await this.prisma.cliente.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                consultor: {
+                    select: {
+                        nome: true,
+                    },
+                },
+                visto: {
+                    select: {
+                        tipo: true,
+                    },
+                },
+            },
+        });
+
+        if (!caseExists) {
+            throw new Error('Case does not exist!');
+        }
+
+        if (caseExists.userId !== userId) {
+            throw new ForbiddenException("You are not authorized to access this resource.");
+        }
+
+        return caseExists;
+    }
 
     async update(nome: string, data: ProcessosDTO) {
         const processoExists = await this.prisma.cliente.findFirst({

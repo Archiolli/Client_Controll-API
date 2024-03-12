@@ -24,7 +24,6 @@ export class ProcessoController {
     @UseGuards(JwtGuard)
     @Post()
     async create(@Body() data: ProcessosDTO) {
-
         try {
             return await this.processoService.create(data);
         } catch (error) {
@@ -48,6 +47,25 @@ export class ProcessoController {
             throw new ForbiddenException(error);
         }
     }
+
+    @UseGuards(JwtGuard)
+    @Get(':id')
+    @Header('Cache-Control', 'none')
+    async getById(@Param('id') id: number, @Request() req) {
+        try {
+            const userId = req.user.id; 
+            return await this.processoService.getById(id, userId);
+        } catch (error) {
+            throw new HttpException({
+                statusCode: HttpStatus.BAD_REQUEST,
+                error: `Erro na execução: ${error}`,
+            }, HttpStatus.BAD_REQUEST, {
+                cause: error
+            });
+        }
+    }
+
+
     @UseGuards(JwtGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() data: ProcessosDTO) {

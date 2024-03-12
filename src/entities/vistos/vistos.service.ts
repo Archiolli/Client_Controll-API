@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { vistosDTO } from './vistos.dto';
 
 
-    
+
 @Injectable()
 export class VistosService {
     constructor(private prisma: PrismaService) { }
 
 
-    async create(data : vistosDTO)  {
+    async create(data: vistosDTO) {
         const vistoExists = await this.prisma.visto.findFirst({
             where: {
                 tipo: data.tipo,
@@ -27,8 +27,31 @@ export class VistosService {
         return visto;
     }
 
-    async findAll() {
-        return this.prisma.visto.findMany();
+    async findAll(userId: number) {
+        return this.prisma.visto.findMany({
+            where: {
+                userId: userId
+            }
+        });
+    }
+
+
+    async getById(id: number, userId: number) {
+        const caseExists = await this.prisma.visto.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!caseExists) {
+            throw new Error('Case does not exist!');
+        }
+
+        if (caseExists.userId !== userId) {
+            throw new ForbiddenException("You are not authorized to access this resource.");
+        }
+
+        return caseExists;
     }
 
 
