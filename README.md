@@ -1,12 +1,12 @@
 
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
 
 ## Description
 
-[Nest](./src/doc/images/estruturaPastas.png) framework TypeScript starter repository.
+[Pastas](./src/doc/images/estruturaPastas.png "Estrutura de pastas do projeto") 
+
+
 
 ## Installation
 
