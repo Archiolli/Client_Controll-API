@@ -4,7 +4,8 @@
 
 ## Description
 
-[Pastas](./src/doc/images/estruturaPastas.png "Estrutura de pastas do projeto") 
+<img src="./src/doc/images/estruturaPastas.png" alt="Estrutura de pastas"/>
+
 
 
 
