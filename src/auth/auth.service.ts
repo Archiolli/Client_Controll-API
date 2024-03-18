@@ -20,19 +20,22 @@ export class AuthService {
             }
         }
 
+        const expiresIn = '2h'; // Tempo de expiração do token
+        
         return {
             user,
             backEndTokens: {
                 acssesToken: await this.jwtService.signAsync(payload, {
-                    expiresIn: '2h',
+                    expiresIn,
                     secret: process.env.jwtSecretKey
                 }),
                 refreshToken: await this.jwtService.signAsync(payload, {
                     expiresIn: '7d',
                     secret: process.env.jwtRefreshTokenKey
                 })
-            }
-        }
+            },
+            exp:expiresIn 
+        };
     }
 
 

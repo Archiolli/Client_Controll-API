@@ -1,4 +1,4 @@
-import { IsEmail, IsString, isString } from "class-validator";
+import { IsDate, IsEmail, IsString, isString } from "class-validator";
 
 
 export class loginDTO {
@@ -9,5 +9,7 @@ export class loginDTO {
 
     @IsString()
     senha: string;
+
+    expiresIn: string;
 
 }
