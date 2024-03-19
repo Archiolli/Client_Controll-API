@@ -26,7 +26,7 @@ export class AuthService {
         // Data atual com moment
         const dataAtual = moment().add(7, 'hour').format('YYYY-MM-DD HH:mm:ss');
 
-        const expiresIn = '7'; // Tempo de expiração do token
+        const expiresIn = '7h'; // Tempo de expiração do token
 
         return {
             user,
