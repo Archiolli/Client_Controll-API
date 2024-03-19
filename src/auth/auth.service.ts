@@ -3,6 +3,8 @@ import { loginDTO } from './auth.dto';
 import { UsersService } from 'src/entities/users/users.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import * as moment from 'moment';
+
 
 @Injectable()
 export class AuthService {
@@ -12,6 +14,8 @@ export class AuthService {
     async login(atualUser: loginDTO) {
         const user = await this.validateUser(atualUser)
 
+
+        
         const payload = {
             id: user.id,
             email: user.email,
@@ -19,9 +23,11 @@ export class AuthService {
                 nome: user.nome,
             }
         }
+        // Data atual com moment
+        const dataAtual = moment().add(7, 'hour').format('YYYY-MM-DD HH:mm:ss');
 
-        const expiresIn = '2h'; // Tempo de expiração do token
-        
+        const expiresIn = '7'; // Tempo de expiração do token
+
         return {
             user,
             backEndTokens: {
@@ -34,7 +40,7 @@ export class AuthService {
                     secret: process.env.jwtRefreshTokenKey
                 })
             },
-            exp:expiresIn 
+            exp: dataAtual
         };
     }
 
